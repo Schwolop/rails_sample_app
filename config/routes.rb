@@ -1,5 +1,6 @@
 SampleApp::Application.routes.draw do
-  get "users/new" # To be deleted later (in section 6.3.3)
+  resources :users
+
   match '/signup',  :to => 'users#new'
 
   match '/contact', :to => 'pages#contact'
