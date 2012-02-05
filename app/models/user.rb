@@ -13,7 +13,10 @@ class User < ActiveRecord::Base
   attr_accessor :password
   attr_accessible :name, :email, :password, :password_confirmation
 
-  has_many :microposts
+  has_many :microposts, :dependent => :destroy
+    # The ":dependent => :destroy" part means microposts associated with a 
+    # particular user are destroyed if that user is destroyed. For a site 
+    # like wikiblog, this is not desirable.
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   email_regex2 = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
