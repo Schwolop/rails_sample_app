@@ -90,9 +90,9 @@ describe MicropostsController do
       
       describe "for an admin user" do
         before(:each) do
-          @admin = test_sign_in(Factory(:user, :admin => true))
-          @user = Factory(:user, :email => Factory.next(:email))
-          @micropost = Factory(:micropost, :user => @user)
+          @user = test_sign_in(Factory(:user, :admin => true))
+          @postUser = Factory(:user, :email => Factory.next(:email))
+          @micropost = Factory(:micropost, :user => @postUser)
         end
 
         it "should destroy the micropost" do
@@ -100,6 +100,7 @@ describe MicropostsController do
             delete :destroy, :id => @micropost
           end.should change(Micropost, :count).by(-1)
         end
+        
       end
     end # "DELETE 'destroy'"
 end

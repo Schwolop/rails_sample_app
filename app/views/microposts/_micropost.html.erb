@@ -5,11 +5,19 @@
       Posted <%= time_ago_in_words(micropost.created_at) %> ago.
     </span>
   </td>
-  <% if current_user?(micropost.user) || @user.admin? %>
+  <% if current_user?(micropost.user) %>
     <td>
       <%= link_to "delete", micropost, :method => :delete,
                                        :confirm => "Are you sure?",
                                        :title => micropost.content %>
     </td>
-  <% end %>
+  <% elsif signed_in? %>
+		<% if current_user.admin? %>
+			<td>
+	      <%= link_to "delete", micropost, :method => :delete,
+	                                       :confirm => "Are you sure?",
+	                                       :title => micropost.content %>
+	    </td>
+		<% end %>
+	<% end %>
 </tr>
