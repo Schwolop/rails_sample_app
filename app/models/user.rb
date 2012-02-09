@@ -17,6 +17,19 @@ class User < ActiveRecord::Base
     # The ":dependent => :destroy" part means microposts associated with a 
     # particular user are destroyed if that user is destroyed. For a site 
     # like wikiblog, this is not desirable.
+    
+  has_many :relationships, :foreign_key => "follower_id",
+                             :dependent => :destroy
+    # Relationships (follower->followed links) *should* be destroyed when
+    # either party is destroyed.
+  has_many :following, :through => :relationships, :source => :followed  
+  
+  has_many :reverse_relationships, :foreign_key => "followed_id",
+                                   :class_name => "Relationship", # Must tell 
+   # it the class name because it's not ReverseRelationship, but just 
+   # Relationship.
+                                   :dependent => :destroy
+  has_many :followers, :through => :reverse_relationships, :source => :follower
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   email_regex2 = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
@@ -47,6 +60,18 @@ class User < ActiveRecord::Base
   def self.authenticate_with_salt(id, cookie_salt)
     user = find_by_id(id)
     (user && user.salt == cookie_salt) ? user : nil
+  end
+  
+  def following?(followed)
+    relationships.find_by_followed_id(followed)
+  end
+
+  def follow!(followed)
+    relationships.create!(:followed_id => followed.id)
+  end
+  
+  def unfollow!(followed)
+    relationships.find_by_followed_id(followed).destroy
   end
   
   def feed
