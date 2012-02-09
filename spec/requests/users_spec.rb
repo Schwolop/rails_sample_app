@@ -55,6 +55,6 @@ describe "Users" do
         controller.should_not be_signed_in
       end
     end
-  end # end "signup"
+  end # end "sign in/out"
   
 end

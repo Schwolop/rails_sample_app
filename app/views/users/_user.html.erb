@@ -7,9 +7,11 @@
       <%= link_to user.name, user %>
 		<% end %>
 		<% if current_user != user %>
-		  | <%= link_to "delete", user, :method => :delete, 
-				:confirm => "Are you sure?",
-        :title => "Delete #{user.name}" %>
+			<% if @show_delete %>
+			  | <%= link_to "delete", user, :method => :delete, 
+					:confirm => "Are you sure?",
+	        :title => "Delete #{user.name}" %>
+			<% end %>
 		<% else %>
 		  (This is you!)
 		<% end %>
